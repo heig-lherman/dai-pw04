@@ -32,7 +32,10 @@ import static java.nio.file.StandardOpenOption.WRITE;
  *         transitively supported, the underlying entrySet is made immutable to
  *         avoid inconsistencies between the persisted state and the delegate state.
  */
-public class FileBackedPersistentHashMap<K extends Serializable, V extends Serializable> extends AbstractMap<K, V> {
+public class FileBackedPersistentHashMap<
+        K extends Serializable,
+        V extends Serializable
+        > extends AbstractMap<K, V> {
 
     private final Path file;
     private final Map<K, V> delegate;
@@ -58,8 +61,13 @@ public class FileBackedPersistentHashMap<K extends Serializable, V extends Seria
         }
     }
 
-    public void save() {
-        try (var out = new BufferedOutputStream(Files.newOutputStream(file, WRITE, CREATE, TRUNCATE_EXISTING))) {
+    private void save() {
+        try (var out = new BufferedOutputStream(
+                Files.newOutputStream(
+                        file,
+                        WRITE, CREATE, TRUNCATE_EXISTING
+                )
+        )) {
             var output = new ObjectOutputStream(out);
             output.writeObject(delegate);
         } catch (IOException e) {
