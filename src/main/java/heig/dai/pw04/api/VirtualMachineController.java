@@ -29,7 +29,7 @@ import static io.javalin.apibuilder.ApiBuilder.put;
  */
 public class VirtualMachineController implements EndpointGroup {
 
-    private final static Path STORE_PATH = Path.of("virtual-machines.dat");
+    private static final Path STORE_PATH = Path.of("virtual-machines.dat");
 
     // We use a persistent map to store the virtual machines in a file
     private final Map<UUID, VirtualMachine> store;
