@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="reader [start]" type="Application" factoryName="Application">
+  <configuration default="false" name="api server [start]" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="heig.dai.pw04.ApiServerCli" />
-    <module name="pw-distributed-monitoring" />
-    <option name="PROGRAM_PARAMETERS" value="-vv" />
+    <module name="pw-api" />
+    <option name="PROGRAM_PARAMETERS" value="server " />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

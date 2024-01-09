@@ -13,6 +13,7 @@
 
         <docker.base-image.alpine>eclipse-temurin:17-jre-alpine</docker.base-image.alpine>
 
+        <jackson.version>2.15.0</jackson.version>
         <javalin.version>5.6.3</javalin.version>
         <logback.version>1.4.11</logback.version>
         <lombok.version>1.18.28</lombok.version>
@@ -32,6 +33,7 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
         </dependency>
+
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
@@ -41,6 +43,12 @@
             <groupId>io.javalin</groupId>
             <artifactId>javalin</artifactId>
             <version>${javalin.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
