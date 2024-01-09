@@ -2,6 +2,7 @@ package heig.dai.pw04;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import heig.dai.pw04.command.ServerCommand;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -25,6 +26,7 @@ import picocli.CommandLine.ScopeType;
         mixinStandardHelpOptions = true,
         subcommands = {
                 HelpCommand.class,
+                ServerCommand.class,
         }
 )
 public class ApiServerCli implements Runnable {
