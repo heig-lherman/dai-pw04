@@ -71,11 +71,6 @@
           - docker-buildx-plugin
           - docker-compose-plugin
 
-    - name: Installation de docker-compose-plugin
-      ansible.builtin.apt:
-        name: docker-compose-plugin
-        state: present
-
   handlers:
     - name: Mise à jour de l'index des paquets
       ansible.builtin.apt:
