@@ -1,0 +1,82 @@
+- name: Préparation de la machine
+  hosts: all
+  become: 'yes'
+  tasks:
+    - name: Mise à jour de la liste des paquets
+      ansible.builtin.apt:
+        update_cache: 'yes'
+        cache_valid_time: 3600
+
+    - name: Mise à niveau complète des paquets
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: Installation de apache2-utils
+      ansible.builtin.apt:
+        name: apache2-utils
+        state: present
+
+    - name: Suppression des paquets
+      ansible.builtin.apt:
+        name: '{{ item }}'
+        state: absent
+      loop:
+        - docker.io
+        - docker-doc
+        - docker-compose
+        - docker-compose-v2
+        - podman-docker
+
+    - name: Mise à jour des paquets et installation des dépendances
+      ansible.builtin.apt:
+        pkg:
+          - ca-certificates
+          - curl
+          - gnupg
+
+    - name: Création du répertoire /etc/apt/keyrings
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Téléchargement et ajout de la clé GPG de Docker
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        keyring: /etc/apt/keyrings/docker.gpg
+        state: present
+
+    - name: Ajout du dépôt Docker
+      ansible.builtin.shell:
+        cmd: |
+          echo \
+          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+          $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+    - name: Mise à jour de la liste des paquets
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Installation des paquets Docker
+      ansible.builtin.apt:
+        name: '{{ packages }}'
+        update_cache: 'yes'
+        state: present
+      vars:
+        packages:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+
+    - name: Installation de docker-compose-plugin
+      ansible.builtin.apt:
+        name: docker-compose-plugin
+        state: present
+
+  handlers:
+    - name: Mise à jour de l'index des paquets
+      ansible.builtin.apt:
+        update_cache: 'yes'
