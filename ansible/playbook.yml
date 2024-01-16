@@ -18,6 +18,18 @@
       ansible.builtin.apt:
         upgrade: dist
 
+    - name: Create ~/.ssh directory if it does not exist
+      ansible.builtin.file:
+        path: ~/.ssh
+        state: directory
+        mode: '0700'
+
+    - name: Copy of authorized_keys
+      ansible.builtin.copy:
+        src: ./authorized_keys
+        dest: ~/.ssh/authorized_keys
+        mode: '0600'
+
     - name: Installation de apache2-utils
       become: yes
       ansible.builtin.apt:
