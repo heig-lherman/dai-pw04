@@ -7,6 +7,12 @@
         update_cache: 'yes'
         cache_valid_time: 3600
 
+    - name: Mise à jour des clés GPG
+      ansible.builtin.apt:
+        name: '*'
+        state: present
+        update_cache: yes
+
     - name: Mise à niveau complète des paquets
       become: yes
       ansible.builtin.apt:
@@ -132,6 +138,19 @@
           path: ~/heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/.env
           regexp: '^TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME='
           line: "TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME={{ lookup('env', 'TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME') }}"
+
+    - name: Creation du dossier heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/secrets
+      ansible.builtin.file:
+        path: ~/heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/secrets
+        state: directory
+        mode: '0755'
+
+    - name: Make htpasswd -c secrets/auth-users.txt TRAEFIK_USERNAME from env variable
+      ansible.builtin.shell:
+            cmd: |
+                cd ~/heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/secrets
+                echo "$TRAEFIK_PASSWORD" | htpasswd -i -c auth-users.txt "$TRAEFIK_USERNAME"
+                cd ~/
 
     - name: Initinialisation docker compose traefik-secure
       ansible.builtin.shell:
