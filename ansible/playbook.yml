@@ -1,22 +1,25 @@
 - name: Préparation de la machine
   hosts: all
-  become: 'yes'
   tasks:
     - name: Mise à jour de la liste des paquets
+      become: yes
       ansible.builtin.apt:
         update_cache: 'yes'
         cache_valid_time: 3600
 
     - name: Mise à niveau complète des paquets
+      become: yes
       ansible.builtin.apt:
         upgrade: dist
 
     - name: Installation de apache2-utils
+      become: yes
       ansible.builtin.apt:
         name: apache2-utils
         state: present
 
     - name: Suppression des paquets
+      become: yes
       ansible.builtin.apt:
         name: '{{ item }}'
         state: absent
@@ -28,6 +31,7 @@
         - podman-docker
 
     - name: Mise à jour des paquets et installation des dépendances
+      become: yes
       ansible.builtin.apt:
         pkg:
           - ca-certificates
@@ -35,18 +39,21 @@
           - gnupg
 
     - name: Création du répertoire /etc/apt/keyrings
+      become: 'yes'
       ansible.builtin.file:
         path: /etc/apt/keyrings
         state: directory
         mode: '0755'
 
     - name: Téléchargement et ajout de la clé GPG de Docker
+      become: yes
       ansible.builtin.apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         keyring: /etc/apt/keyrings/docker.gpg
         state: present
 
     - name: Ajout du dépôt Docker
+      become: yes
       ansible.builtin.shell:
         cmd: |
           echo \
@@ -55,10 +62,12 @@
           sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
     - name: Mise à jour de la liste des paquets
+      become: 'yes'
       ansible.builtin.apt:
         update_cache: yes
 
     - name: Installation des paquets Docker
+      become: 'yes'
       ansible.builtin.apt:
         name: '{{ packages }}'
         update_cache: 'yes'
@@ -70,6 +79,79 @@
           - containerd.io
           - docker-buildx-plugin
           - docker-compose-plugin
+
+    - name: Creation du groupe docker
+      ansible.builtin.group:
+        name: docker
+        state: present
+      become: yes
+
+    - name: Ajout de l'utilisateur courant au groupe docker
+      ansible.builtin.user:
+        name: "{{ ansible_env.USER }}"
+        groups: docker
+        append: yes
+      become: yes
+
+    - name: Redémarrer le service Docker
+      ansible.builtin.service:
+        name: docker
+        state: restarted
+      become: yes
+
+    - name: Activer le service Docker
+      ansible.builtin.systemd:
+        name: docker.service
+        enabled: yes
+      become: yes
+
+    - name: Activer le service containerd
+      ansible.builtin.systemd:
+        name: containerd.service
+        enabled: yes
+      become: yes
+
+    - name: Effacer /heig-vd-dai-course-code-examples s'il existe
+      ansible.builtin.file:
+        path: ~/heig-vd-dai-course-code-examples
+        state: absent
+
+    - name: Clone du dépôt https://github.com/heig-vd-dai-course/heig-vd-dai-course-code-examples.git
+      ansible.builtin.git:
+          repo: 'https://github.com/heig-vd-dai-course/heig-vd-dai-course-code-examples.git'
+          dest: '~/heig-vd-dai-course-code-examples/'
+
+    - name: Configuration du heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/.env (TRAEFIK_ACME_EMAIL)
+      ansible.builtin.lineinfile:
+          path: ~/heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/.env
+          regexp: '^TRAEFIK_ACME_EMAIL='
+          line: "TRAEFIK_ACME_EMAIL={{ lookup('env', 'TRAEFIK_ACME_EMAIL') }}"
+
+    - name: Configuration du heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/.env (TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME)
+      ansible.builtin.lineinfile:
+          path: ~/heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/.env
+          regexp: '^TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME='
+          line: "TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME={{ lookup('env', 'TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME') }}"
+
+    - name: Initinialisation docker compose traefik-secure
+      ansible.builtin.shell:
+          cmd: |
+              cd ~/heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/
+              docker compose up -d
+              cd ~/
+
+    - name: Configuration du heig-vd-dai-course-code-examples/23-practical-work-4/whoami-with-traefik-secure/.env
+      ansible.builtin.lineinfile:
+          path: ~/heig-vd-dai-course-code-examples/23-practical-work-4/whoami-with-traefik-secure/.env
+          regexp: '^WHOAMI_FULLY_QUALIFIED_DOMAIN_NAME='
+          line: "WHOAMI_FULLY_QUALIFIED_DOMAIN_NAME={{ lookup('env', 'WHOAMI_FULLY_QUALIFIED_DOMAIN_NAME') }}"
+
+    - name: Initinialisation docker compose whoami-with-traefik-secure
+      ansible.builtin.shell:
+          cmd: |
+              cd ~/heig-vd-dai-course-code-examples/23-practical-work-4/whoami-with-traefik-secure/
+              docker compose up -d
+              cd ~/
 
   handlers:
     - name: Mise à jour de l'index des paquets
