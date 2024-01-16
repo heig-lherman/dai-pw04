@@ -4,10 +4,11 @@
     - name: Mise à jour de la liste des paquets
       become: yes
       ansible.builtin.apt:
-        update_cache: 'yes'
+        update_cache: yes
         cache_valid_time: 3600
 
     - name: Mise à jour des clés GPG
+      become: yes
       ansible.builtin.apt:
         name: '*'
         state: present
@@ -57,7 +58,7 @@
           - gnupg
 
     - name: Création du répertoire /etc/apt/keyrings
-      become: 'yes'
+      become: yes
       ansible.builtin.file:
         path: /etc/apt/keyrings
         state: directory
@@ -80,15 +81,15 @@
           sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
     - name: Mise à jour de la liste des paquets
-      become: 'yes'
+      become: yes
       ansible.builtin.apt:
         update_cache: yes
 
     - name: Installation des paquets Docker
-      become: 'yes'
+      become: yes
       ansible.builtin.apt:
         name: '{{ packages }}'
-        update_cache: 'yes'
+        update_cache: yes
         state: present
       vars:
         packages:
@@ -129,9 +130,10 @@
         enabled: yes
       become: yes
 
-    - name: Effacer /heig-vd-dai-course-code-examples s'il existe
+    - name: Effacer ~/heig-vd-dai-course-code-examples s'il existe
+      become: yes
       ansible.builtin.file:
-        path: ~/heig-vd-dai-course-code-examples
+        path: "/home/{{ ansible_env.USER }}/heig-vd-dai-course-code-examples"
         state: absent
 
     - name: Clone du dépôt https://github.com/heig-vd-dai-course/heig-vd-dai-course-code-examples.git
@@ -163,8 +165,11 @@
                 cd ~/heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/secrets
                 echo "$TRAEFIK_PASSWORD" | htpasswd -i -c auth-users.txt "$TRAEFIK_USERNAME"
                 cd ~/
+      environment:
+        TRAEFIK_USERNAME: "{{ lookup('env', 'TRAEFIK_USERNAME') }}"
+        TRAEFIK_PASSWORD: "{{ lookup('env', 'TRAEFIK_PASSWORD') }}"
 
-    - name: Initinialisation docker compose traefik-secure
+    - name: Initialisation docker compose traefik-secure
       ansible.builtin.shell:
           cmd: |
               cd ~/heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/
@@ -187,4 +192,4 @@
   handlers:
     - name: Mise à jour de l'index des paquets
       ansible.builtin.apt:
-        update_cache: 'yes'
+        update_cache: yes
