@@ -6,6 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import static io.javalin.apibuilder.ApiBuilder.get;
 import static io.javalin.apibuilder.ApiBuilder.path;
 
@@ -35,7 +39,7 @@ public class ServerCommand implements Runnable {
     @Override
     public void run() {
         Javalin.create().routes(() -> {
-            get("/", ctx -> ctx.redirect("/virtual-machines"));
+            get("/", ctx -> ctx.result(Files.readString(Paths.get("API.md"))));
             path("virtual-machines", VirtualMachineController.registerController());
         }).start(port);
         log.info("Server started on port {}", port);
