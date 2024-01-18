@@ -1,4 +1,8 @@
-# Practical Work 4 - API server for ...
+# Practical Work 4 - API server for managing VMs
+
+## API documentation
+
+API documentation can be found in the `API.md` file or at the following URL: https://heig-lherman.github.io/dai-pw04/ 
 
 ## Dependencies
 
