@@ -4,13 +4,12 @@ services:
 
   dai-pw04:
     image: ghcr.io/heig-lherman/dai-pw04:latest
-    ports:
-      - "8080:8080"
     command: "server"
     labels:
       ## Traefik
       - traefik.enable=true
       - traefik.docker.network=traefik
+      - traefik.http.services.api-https.loadbalancer.server.port=8080
       ## HTTP
       - traefik.http.routers.api-http.entrypoints=http
       - traefik.http.routers.api-http.rule=Host(`${API_FQDN}`)
