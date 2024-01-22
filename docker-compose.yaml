@@ -1,2 +1,9 @@
 version: '3.8'
-services: []
+
+services:
+  dai-pw04:
+    image: ghcr.io/heig-lherman/dai-pw04:latest
+    ports:
+      - "8080:8080"
+    command: "server"
+
