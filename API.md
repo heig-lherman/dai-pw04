@@ -30,7 +30,7 @@ The response body contains a JSON array with the following properties:
 #### Example
 
 ```bash
-curl -B http://localhost:8080/virtual-machines
+curl -B https://api.dai.heig.lutonite.dev//virtual-machines
 ```
 
 ### Get one the VM using its id
@@ -63,7 +63,7 @@ The response body contains a JSON object with the following properties:
 #### Example
 
 ```bash
-curl -B http://localhost:8080/virtual-machines/e722f4cc-4c37-4d93-9c97-ff0d4fa82fbe
+curl -B https://api.dai.heig.lutonite.dev//virtual-machines/e722f4cc-4c37-4d93-9c97-ff0d4fa82fbe
 ```
 
 ### Create a new VM
@@ -102,7 +102,7 @@ The response body contains a JSON object with the following properties:
 #### Example
 
 ```bash
-curl -i -X POST -v "Content-Type: application/json" -d '{"hostname":"example.test","os":"Windows","ip":"1.1.1.1","cpu":"3","ram":"32"}' http://localhost:8080/virtual-machines
+curl -i -X POST -v "Content-Type: application/json" -d '{"hostname":"example.test","os":"Windows","ip":"1.1.1.1","cpu":"3","ram":"32"}' https://api.dai.heig.lutonite.dev//virtual-machines
 ```
 
 ### Update an existing VM using its id
@@ -138,7 +138,7 @@ The response body is empty
 #### Example
 
 ```bash
-curl -i -X PUT -v "Content-Type: application/json" -d '{"hostname":"example.test","os":"Windows","ip":"1.1.1.1","cpu":"3","ram":"32"}' http://localhost:8080/virtual-machines/e722f4cc-4c37-4d93-9c97-ff0d4fa82fbe
+curl -i -X PUT -v "Content-Type: application/json" -d '{"hostname":"example.test","os":"Windows","ip":"1.1.1.1","cpu":"3","ram":"32"}' https://api.dai.heig.lutonite.dev//virtual-machines/e722f4cc-4c37-4d93-9c97-ff0d4fa82fbe
 ```
 
 ### Delete an existing VM using its id
@@ -164,6 +164,6 @@ The response body is empty.
 #### Example
 
 ```bash
-curl -i -X DELETE -v "Content-Type: application/json"http://localhost:8080/virtual-machines/e722f4cc-4c37-4d93-9c97-ff0d4fa82fbe
+curl -i -X DELETE -v "Content-Type: application/json"https://api.dai.heig.lutonite.dev//virtual-machines/e722f4cc-4c37-4d93-9c97-ff0d4fa82fbe
 ```
 

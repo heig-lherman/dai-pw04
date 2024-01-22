@@ -2,7 +2,7 @@
 
 ## API documentation
 
-API documentation can be found in the `API.md` file or at the following URL: https://heig-lherman.github.io/dai-pw04/ 
+API documentation can be found in the `API.md` file or at the following URL: https://api.dai.heig.lutonite.dev/ 
 
 ## Dependencies
 
@@ -60,8 +60,8 @@ The CLI methods are documented in the form of usage messages, given using the `-
 java -jar target/pw-api-1.0.0-SNAPSHOT.jar --help
 ```
 
-Giving
+To start the server, run the following command:
 
-```text
-[Input example here]
+```shell
+java -jar target/pw-api-1.0.0-SNAPSHOT.jar server
 ```
