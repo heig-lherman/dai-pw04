@@ -198,7 +198,7 @@
     - name: Clone du dépôt dai-pw04
       ansible.builtin.git:
           repo: 'git@github.com:heig-lherman/dai-pw04.git'
-          dest: '~/heig-vd-dai-course-code-examples/'
+          dest: '~/dai-pw04/'
     
     - name: Initialisation docker compose dai-pw04
       ansible.builtin.shell:
