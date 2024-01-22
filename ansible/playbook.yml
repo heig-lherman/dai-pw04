@@ -131,15 +131,16 @@
       become: yes
 
     - name: Effacer ~/heig-vd-dai-course-code-examples s'il existe
-      become: yes
       ansible.builtin.file:
-        path: "/home/{{ ansible_env.USER }}/heig-vd-dai-course-code-examples"
+        path: "~/heig-vd-dai-course-code-examples"
         state: absent
+        force: yes
 
     - name: Clone du dépôt https://github.com/heig-vd-dai-course/heig-vd-dai-course-code-examples.git
       ansible.builtin.git:
           repo: 'https://github.com/heig-vd-dai-course/heig-vd-dai-course-code-examples.git'
           dest: '~/heig-vd-dai-course-code-examples/'
+          force: yes
 
     - name: Configuration du heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/.env (TRAEFIK_ACME_EMAIL)
       ansible.builtin.lineinfile:
@@ -182,7 +183,7 @@
           regexp: '^WHOAMI_FULLY_QUALIFIED_DOMAIN_NAME='
           line: "WHOAMI_FULLY_QUALIFIED_DOMAIN_NAME={{ lookup('env', 'WHOAMI_FULLY_QUALIFIED_DOMAIN_NAME') }}"
 
-    - name: Initinialisation docker compose whoami-with-traefik-secure
+    - name: Initialisation docker compose whoami-with-traefik-secure
       ansible.builtin.shell:
           cmd: |
               cd ~/heig-vd-dai-course-code-examples/23-practical-work-4/whoami-with-traefik-secure/
@@ -192,21 +193,22 @@
     - name: Effacer ~/dai-pw04 s'il existe
       become: yes
       ansible.builtin.file:
-        path: "/home/{{ ansible_env.USER }}/dai-pw04"
+        path: "~/dai-pw04"
         state: absent
+        force: yes
 
     - name: Clone du dépôt dai-pw04
       ansible.builtin.git:
-          repo: 'git@github.com:heig-lherman/dai-pw04.git'
-          dest: '~/dai-pw04/'
-    
+          repo: 'https://github.com/heig-lherman/dai-pw04.git'
+          dest: "~/dai-pw04"
+
     - name: Initialisation docker compose dai-pw04
       ansible.builtin.shell:
           cmd: |
               cd ~/dai-pw04/
               docker compose up -d
               cd ~/
-      
+
   handlers:
     - name: Mise à jour de l'index des paquets
       ansible.builtin.apt:
