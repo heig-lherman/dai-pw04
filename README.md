@@ -71,3 +71,9 @@ To start the server, run the following command:
 ```shell
 java -jar target/pw-api-1.0.0-SNAPSHOT.jar server
 ```
+
+## Deployment
+
+The application is deployed by connecting to the server using SSH and pulling from the git repository.
+
+Upon pulling the repository, the docker image must be rebuilt and run once again.
