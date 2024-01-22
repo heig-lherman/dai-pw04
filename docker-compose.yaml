@@ -1,9 +1,30 @@
 version: '3.8'
 
 services:
+
   dai-pw04:
     image: ghcr.io/heig-lherman/dai-pw04:latest
     ports:
       - "8080:8080"
     command: "server"
+    labels:
+      ## Traefik
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      ## HTTP
+      - traefik.http.routers.api-http.entrypoints=http
+      - traefik.http.routers.api-http.rule=Host(`${API_FQDN}`)
+      # We add a middleware to redirect HTTP to HTTPS
+      - traefik.http.routers.api-http.middlewares=redirect-to-https
+      ## HTTPS
+      # We add the HTTPS configuration
+      - traefik.http.routers.api-https.entrypoints=https
+      - traefik.http.routers.api-https.rule=Host(`${API_FQDN}`)
+      - traefik.http.routers.api-https.tls=true
+      - traefik.http.routers.api-https.tls.certresolver=letsencrypt
+    networks:
+      - traefik
 
+networks:
+  traefik:
+    external: true
