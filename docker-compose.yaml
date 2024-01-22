@@ -12,7 +12,7 @@ services:
       - traefik.http.services.api-https.loadbalancer.server.port=8080
       ## HTTP
       - traefik.http.routers.api-http.entrypoints=http
-      - traefik.http.routers.api-http.rule=Host(`${API_FQDN}`)
+      - traefik.http.routers.api-http.rule=Host(`api.dai.heig.lutonite.dev`)
       # We add a middleware to redirect HTTP to HTTPS
       - traefik.http.routers.api-http.middlewares=redirect-to-https
       ## HTTPS
