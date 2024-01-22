@@ -189,6 +189,24 @@
               docker compose up -d
               cd ~/
 
+    - name: Effacer ~/dai-pw04 s'il existe
+      become: yes
+      ansible.builtin.file:
+        path: "/home/{{ ansible_env.USER }}/dai-pw04"
+        state: absent
+
+    - name: Clone du dépôt dai-pw04
+      ansible.builtin.git:
+          repo: 'git@github.com:heig-lherman/dai-pw04.git'
+          dest: '~/heig-vd-dai-course-code-examples/'
+    
+    - name: Initialisation docker compose dai-pw04
+      ansible.builtin.shell:
+          cmd: |
+              cd ~/dai-pw04/
+              docker compose up -d
+              cd ~/
+      
   handlers:
     - name: Mise à jour de l'index des paquets
       ansible.builtin.apt:
