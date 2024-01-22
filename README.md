@@ -1,5 +1,11 @@
 # Practical Work 4 - API server for managing VMs
 
+## Group members
+- Massimo Stefani
+- Loïc Herman
+- Kevin Farine
+- Olin Bourquin
+
 ## API documentation
 
 API documentation can be found in the `API.md` file or at the following URL: https://api.dai.heig.lutonite.dev/ 
