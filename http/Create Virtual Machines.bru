@@ -1,0 +1,21 @@
+meta {
+  name: Create Virtual Machines
+  type: http
+  seq: 2
+}
+
+post {
+  url: https://api.dai.heig.lutonite.dev/virtual-machines
+  body: json
+  auth: none
+}
+
+body:json {
+   {
+     "hostname": "lutonux",
+     "os": "Linux 6.7.2",
+     "ip": "10.129.42.42",
+     "cpu": 4,
+     "ram": 32.8
+   }
+}
