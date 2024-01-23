@@ -187,3 +187,22 @@ docker-compose up -d
 cd ~/
 ```
 
+## DNS configuration
+
+We use terraform for the configuration of our DNS rules on the cloudflare platform, the configuration is
+available in the `terraform` folder, which anyone can use to configure their own DNS rules for the app,
+provided they change the secrets to point to their own respective accounts.
+
+As for the actual configuration itself, the application requires a simple A record pointing to the server's IP address,
+defined as below (for the `api.dai.heig.lutonite.dev` domain):
+
+```
+api.dai.heig.lutonite.dev. 300 IN A 185.144.38.63
+```
+
+In cloudflare, we disabled the proxy since we are using traefik to handle the SSL certificates, as
+well as the redirection to the proper services, and we didn't want cloudflare to intervene in the TLS chain.
+
+We have added additional domain names all pointing to the same IP address for access to the whoami application
+as well as the traefik dashboard.
+
