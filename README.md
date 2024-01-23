@@ -81,10 +81,17 @@ Upon pulling the repository, the docker image must be rebuilt and run once again
 If you want to set up a virtual machine, install all the dependencies, and automatically launch the application, 
 you can use Ansible from this repository and execute the following command:
 
-Yo must have `Ansible` (2.10.8) and `Python` (3.10.4) installed on your machine.
+You must have `Ansible` (2.10.8) and `Python` (3.10.4) installed on your machine.
+
+The following environment variables must be set:
+- `TRAEFIK_ACME_EMAIL`: the email address used to register the Let's Encrypt account
+- `TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME`: the domain name used to access the application
+- `TRAEFIK_USERNAME`: the username used to access Traefik
+- `TRAEFIK_PASSWORD`: the password used to access Traefik
+- `WHOAMI_FULLY_QUALIFIED_DOMAIN_NAME`: the domain name used to access the Whoami application
 
 ```shell
-ansible-playbook -i ./ansible/hosts ./ansible/playbook.yml -kK
+ansible-playbook -i ./ ansible/hosts ./ansible/playbook.yml -kK
 ```
 
 Docker, Docker composes and the other dependencies will be installed, the authorized_keys will be copied and the 
