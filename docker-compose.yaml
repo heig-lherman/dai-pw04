@@ -18,7 +18,7 @@ services:
       ## HTTPS
       # We add the HTTPS configuration
       - traefik.http.routers.api-https.entrypoints=https
-      - traefik.http.routers.api-https.rule=Host(`${API_FQDN}`)
+      - traefik.http.routers.api-https.rule=Host(`api.dai.heig.lutonite.dev`)
       - traefik.http.routers.api-https.tls=true
       - traefik.http.routers.api-https.tls.certresolver=letsencrypt
     networks:
