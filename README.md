@@ -8,7 +8,7 @@
 
 ## API documentation
 
-API documentation can be found in the `API.md` file or at the following URL: https://api.dai.heig.lutonite.dev/ 
+API documentation can be found in the `API.md` file or at the following URL: https://api.dai.heig.lutonite.dev/
 
 ## Dependencies
 
@@ -77,3 +77,28 @@ java -jar target/pw-api-1.0.0-SNAPSHOT.jar server
 The application is deployed by connecting to the server using SSH and pulling from the git repository.
 
 Upon pulling the repository, the docker image must be rebuilt and run once again.
+
+If you want to set up a virtual machine, install all the dependencies, and automatically launch the application, 
+you can use Ansible from this repository and execute the following command:
+
+You must have `Ansible` (2.10.8) and `Python` (3.10.4) installed on your machine.
+
+The following environment variables must be set:
+- `TRAEFIK_ACME_EMAIL`: the email address used to register the Let's Encrypt account
+- `TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME`: the domain name used to access the application
+- `TRAEFIK_USERNAME`: the username used to access Traefik
+- `TRAEFIK_PASSWORD`: the password used to access Traefik
+- `WHOAMI_FULLY_QUALIFIED_DOMAIN_NAME`: the domain name used to access the Whoami application
+
+```shell
+ansible-playbook -i ./ ansible/hosts ./ansible/playbook.yml -kK
+```
+
+Docker, Docker composes and the other dependencies will be installed, the authorized_keys will be copied and the 
+application will be launched.
+
+Note: `-k` will ask you for the password of the user you want to connect to the VM with. `-K` will ask you for the 
+password of the sudo user (can be the same as the previous one). If you have a ssh key already set up, you can remove it.
+
+You also need to change the IP address of the VM in the `ansible/hosts` file.
+
