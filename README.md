@@ -77,8 +77,6 @@ java -jar target/pw-api-1.0.0-SNAPSHOT.jar server
 
 The application is deployed by connecting to the server using SSH and pulling from the git repository.
 
-Upon pulling the repository, the docker image must be rebuilt and run once again.
-
 If you want to set up a virtual machine, install all the dependencies, and automatically launch the application, 
 you can use Ansible from this repository and execute the following command:
 
