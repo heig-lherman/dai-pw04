@@ -23,7 +23,8 @@ services:
       - traefik.http.routers.api-https.tls.certresolver=letsencrypt
     networks:
       - traefik
-
+    volumes:
+      - ${PWD}/API.md:/API.md
 networks:
   traefik:
     external: true
