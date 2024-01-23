@@ -73,6 +73,7 @@ java -jar target/pw-api-1.0.0-SNAPSHOT.jar server
 ```
 
 ## Deployment
+### Ansible
 
 The application is deployed by connecting to the server using SSH and pulling from the git repository.
 
@@ -101,4 +102,88 @@ Note: `-k` will ask you for the password of the user you want to connect to the 
 password of the sudo user (can be the same as the previous one). If you have a ssh key already set up, you can remove it.
 
 You also need to change the IP address of the VM in the `ansible/hosts` file.
+
+### Manual deployment
+
+- `sudo apt update` to update the package list
+- `sudo apt upgrade` to upgrade the packages
+- Create the `./ssh/authorized_keys` file and copy the content of the ./ansible/authorized_keys file into it. (You must have 
+the ssh folder in the machine)
+```shell
+  mkdir -p ~/.ssh
+  chmod 0700 ~/.ssh
+  cp ./ansible/authorized_keys ~/.ssh/authorized_keys
+  chmod 0600 ~/.ssh/authorized_keys
+  ```
+- Install apache2-utils and remove old versions of docker
+```shell
+sudo apt install apache2-utils
+sudo apt remove docker.io docker-doc docker-compose docker-compose-v2 podman-docker
+sudo apt install ca-certificates curl gnupg
+  ```
+- Ajouter la clé GPG officielle de Docker
+```shell
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+```
+
+- Ajouter le dépôt Docker
+```shell
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+- Installation de Docker et de ses dépendances
+```shell
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+- Création du groupe docker et ajout de l'utilisateur courant
+```shell
+sudo groupadd docker
+sudo usermod -aG docker $USER
+```
+
+- Restart the service and enabling it
+```shell
+sudo systemctl restart docker
+sudo systemctl enable docker
+sudo systemctl enable containerd
+```
+
+- Clone the repositories
+```shell
+rm -rf ~/heig-vd-dai-course-code-examples
+rm -rf ~/dai-pw04
+git clone https://github.com/heig-vd-dai-course/heig-vd-dai-course-code-examples.git ~/heig-vd-dai-course-code-examples
+git clone https://github.com/heig-lherman/dai-pw04.git ~/dai-pw04
+```
+
+- You must configure the followig files:
+  - ~/heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/.env
+  - ~/heig-vd-dai-course-code-examples/23-practical-work-4/whoami-with-traefik-secure/.env
+
+- Create ~/heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/secrets and configure the username and password
+```shell
+mkdir ~/heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/secrets
+htpasswd -c secrets/auth-users.txt admin
+```
+
+
+- Run all the containers
+```shell
+cd ~/heig-vd-dai-course-code-examples/23-practical-work-4/traefik-secure/
+docker-compose up -d
+cd ~/
+
+cd ~/heig-vd-dai-course-code-examples/23-practical-work-4/whoami-with-traefik-secure/
+docker-compose up -d
+cd ~/
+
+cd ~/dai-pw04/
+docker-compose up -d
+cd ~/
+```
 
