@@ -121,12 +121,12 @@ sudo apt install apache2-utils
 sudo apt remove docker.io docker-doc docker-compose docker-compose-v2 podman-docker
 sudo apt install ca-certificates curl gnupg
   ```
-- Ajouter la clé GPG officielle de Docker
+- Add Docker’s official GPG key
 ```shell
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 ```
 
-- Ajouter le dépôt Docker
+- Add the Docker repository to APT sources
 ```shell
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
@@ -134,7 +134,7 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
 
-- Installation de Docker et de ses dépendances
+- Install Docker Engine and dependencies
 ```shell
 sudo apt update
 sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
